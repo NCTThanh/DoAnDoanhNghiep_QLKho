@@ -1,20 +1,119 @@
+/* Import font chữ Inter cho giống các phần mềm SaaS hiện đại */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --kv-blue: #005AAB; /* Màu xanh chuẩn KiotViet */
+  --kv-blue-hover: #004588;
+  --kv-bg: #f0f2f5;
+  --kv-border: #e0e0e0;
+  --kv-text-main: #333333;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  background-color: var(--kv-bg);
+  color: var(--kv-text-main);
   min-height: 100vh;
-  background-color: #f0f2f5;
 }
 
-#root {
+/* =========================================
+   ÉP KIỂU ANT DESIGN CHO GIỐNG KIOTVIET
+========================================= */
+
+/* 1. Nút bấm (Button) */
+.ant-btn-primary {
+  background-color: var(--kv-blue) !important;
+  border-color: var(--kv-blue) !important;
+  box-shadow: 0 2px 4px rgba(0, 90, 171, 0.2) !important;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+.ant-btn-primary:hover {
+  background-color: var(--kv-blue-hover) !important;
+  border-color: var(--kv-blue-hover) !important;
+}
+
+/* 2. Bảng dữ liệu (Table) */
+.ant-table-thead > tr > th {
+  background-color: #f4f6f8 !important; /* Nền xám nhạt cho header bảng */
+  font-weight: 600 !important;
+  color: #333 !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background-color: #f8fafc !important; /* Hiệu ứng hover dòng nhẹ nhàng */
+}
+
+/* 3. Thẻ chứa nội dung (Card) */
+.ant-card {
+  border-radius: 8px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+  border: 1px solid #ebedf0 !important;
+}
+
+.ant-card-head {
+  border-bottom: 1px solid #ebedf0 !important;
+  background-color: #fafafa !important;
+  border-radius: 8px 8px 0 0 !important;
+  font-weight: 600;
+}
+
+/* 4. Sidebar và Menu (Nếu bạn dùng Layout của Ant Design) */
+.ant-layout-sider {
+  background-color: #ffffff !important;
+  border-right: 1px solid var(--kv-border);
+}
+
+.ant-menu-light {
+  color: var(--kv-text-main) !important;
+  border-inline-end: none !important;
+}
+
+.ant-menu-light .ant-menu-item-selected {
+  background-color: #e6f1fc !important; /* Nền xanh nhạt khi chọn */
+  color: var(--kv-blue) !important;
+  font-weight: 600;
+  border-right: 3px solid var(--kv-blue);
+  border-radius: 0 !important;
+  margin: 0 !important;
   width: 100%;
 }
 
-.ant-layout {
-  background: transparent !important;
+.ant-menu-item:hover {
+  color: var(--kv-blue) !important;
+}
+
+/* 5. Header */
+.ant-layout-header {
+  background: var(--kv-blue) !important; 
+  color: white !important;
+  padding: 0 24px !important;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+/* Custom Utilities */
+.text-kv-blue {
+  color: var(--kv-blue);
+}
+/* Chuẩn hóa Typography toàn hệ thống */
+h1, h2, h3, h4, .ant-table-thead > tr > th {
+    font-weight: 700 !important;
+    letter-spacing: -0.02em;
+    color: #1f2937 !important;
+}
+
+/* Chữ in đậm nổi bật cho các dữ liệu quan trọng */
+.font-black {
+    font-weight: 900 !important;
+}
+
+/* Làm mượt viền và đổ bóng */
+.shadow-xl {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 }

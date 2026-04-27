@@ -1,33 +1,56 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Layout } from 'antd';
-import Sidebar from './components/Sidebar';
+import { Avatar, Badge } from 'antd';
+import { BellOutlined, UserOutlined, ShopOutlined } from '@ant-design/icons';
+import Sidebar from './components/common/Sidebar';
 import Dashboard from './pages/Dashboard';
-import Products from './pages/Products';
-import Inventory from './pages/Inventory';
-
-const { Content, Header } = Layout;
-
+import Orders from './pages/Orders';
+import CreateOrderPage from './pages/CreateOrderPage';
+import Products from './pages/Products'; 
+import WarehouseMap from './pages/WarehouseMap';
 function App() {
-    return (
-        <Router>
-            <Layout style={{ minHeight: '100vh' }}>
-                <Sidebar />
-                <Layout>
-                    <Header style={{ background: '#001529', color: '#fff', padding: '0 20px', fontSize: '18px' }}>
-                        Hệ Thống Quản Lý Bách Hóa - STU
-                    </Header>
-                    <Content style={{ margin: '20px', background: '#fff', padding: '20px', borderRadius: '8px' }}>
-                        <Routes>
-                            <Route path="/" element={<Dashboard />} />
-                            <Route path="/products" element={<Products />} />
-                            <Route path="/inventory" element={<Inventory />} />
-                        </Routes>
-                    </Content>
-                </Layout>
-            </Layout>
-        </Router>
-    );
+  return (
+    <Router>
+      <div className="flex h-screen overflow-hidden bg-[#f0f2f5]">
+        {/* Thanh Menu bên trái */}
+        <Sidebar />
+        
+        {/* Khu vực nội dung bên phải */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          
+          {/* Top Header - Chuẩn phong cách KiotViet */}
+          <header className="h-14 bg-[#005AAB] text-white flex items-center justify-between px-6 shadow-md z-10">
+            <div className="flex items-center gap-2">
+               <ShopOutlined className="text-xl" />
+               <span className="font-semibold text-sm tracking-wide">Chi nhánh trung tâm (STU)</span>
+            </div>
+            
+            <div className="flex items-center gap-6">
+              <Badge count={2} size="small">
+                <BellOutlined className="text-xl text-white cursor-pointer hover:text-gray-200 transition-colors" />
+              </Badge>
+              <div className="flex items-center gap-2 cursor-pointer hover:bg-blue-700 px-3 py-1 rounded transition-colors">
+                <Avatar size="small" icon={<UserOutlined />} className="bg-white/20" />
+                <span className="font-medium text-sm">Nguyễn Chí Thanh</span>
+              </div>
+            </div>
+          </header>
+
+          {/* Khu vực thay đổi trang (Pages) */}
+          <main className="flex-1 overflow-auto p-4 md:p-6">
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/create-order" element={<CreateOrderPage />} />
+              <Route path="/orders" element={<Orders />} />
+            
+              <Route path="/warehouse-map" element={<WarehouseMap />} /> 
+            </Routes>
+          </main>
+          
+        </div>
+      </div>
+    </Router>
+  );
 }
 
 export default App;
