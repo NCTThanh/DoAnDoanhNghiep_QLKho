@@ -7,6 +7,13 @@ import Orders from './pages/Orders';
 import CreateOrderPage from './pages/CreateOrderPage';
 import Products from './pages/Products'; 
 import WarehouseMap from './pages/WarehouseMap';
+// Thêm import cho các pages mới
+import Suppliers from './pages/Suppliers';
+import PurchaseOrders from './pages/PurchaseOrders';
+import CreatePurchaseOrder from './pages/CreatePurchaseOrder';
+import ReceivePurchaseOrder from './pages/ReceivePurchaseOrder';
+import ReturnPurchaseOrder from './pages/ReturnPurchaseOrder';
+import InventoryHistory from './pages/InventoryHistory';
 function App() {
   return (
     <Router>
@@ -42,8 +49,15 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/create-order" element={<CreateOrderPage />} />
               <Route path="/orders" element={<Orders />} />
-            
-              <Route path="/warehouse-map" element={<WarehouseMap />} /> 
+              <Route path="/warehouse-map" element={<WarehouseMap />} />
+              
+              {/* Routes mới */}
+              <Route path="/suppliers" element={<Suppliers />} />
+              <Route path="/purchase-orders" element={<PurchaseOrders />} />
+              <Route path="/create-purchase-order" element={<CreatePurchaseOrder />} />
+              <Route path="/receive-purchase-order/:id" element={<ReceivePurchaseOrder />} />
+              <Route path="/return-purchase-order/:id" element={<ReturnPurchaseOrder />} />
+              <Route path="/inventory-history" element={<InventoryHistory />} />
             </Routes>
           </main>
           

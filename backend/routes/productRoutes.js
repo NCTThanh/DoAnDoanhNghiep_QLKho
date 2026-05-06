@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
+const upload = require('../middleware/upload');
 
 // ==================== PRODUCT ROUTES ====================
 
@@ -11,10 +12,10 @@ router.get('/', productController.getAllProducts);
 router.get('/:id', productController.getProductById);
 
 // Thêm sản phẩm mới
-router.post('/', productController.createProduct);
+router.post('/', upload.single('image'), productController.createProduct);
 
 // Cập nhật sản phẩm
-router.put('/:id', productController.updateProduct);
+router.put('/:id', upload.single('image'), productController.updateProduct);
 
 // Xóa sản phẩm
 router.delete('/:id', productController.deleteProduct);

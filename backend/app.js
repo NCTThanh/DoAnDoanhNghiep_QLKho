@@ -3,9 +3,15 @@ const cors = require('cors');
 const morgan = require('morgan');           
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
-// Thêm dòng import này
-const inventoryRoutes = require('./routes/inventoryRoutes'); 
+const inventoryRoutes = require('./routes/inventoryRoutes');
+// Thêm các routes mới
+const supplierRoutes = require('./routes/supplierRoutes');
+const purchaseOrderRoutes = require('./routes/purchaseOrderRoutes');
+const supplierPaymentRoutes = require('./routes/supplierPaymentRoutes');
+const inventoryLogRoutes = require('./routes/inventoryLogRoutes'); 
+const proxyRoutes = require('./routes/proxyRoutes');
 
+const path = require('path');
 const app = express();
 
 // ====================== MIDDLEWARE ======================
@@ -22,19 +28,32 @@ app.use(morgan('dev'));
 // ====================== ROUTES ======================
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
-// Thêm dòng này để Backend nhận diện đường dẫn Dashboard
-app.use('/api/inventory', inventoryRoutes); 
+app.use('/api/inventory', inventoryRoutes);
+// Các routes mới
+app.use('/api/suppliers', supplierRoutes);
+app.use('/api/purchase-orders', purchaseOrderRoutes);
+app.use('/api/supplier-payments', supplierPaymentRoutes);
+app.use('/api/inventory-log', inventoryLogRoutes); 
+// Proxy for external images (caches into backend/uploads)
+app.use('/api', proxyRoutes);
+
+// Serve uploaded images
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ====================== ROUTE TEST ======================
 app.get('/', (req, res) => {
   res.json({
     success: true,
     message: "🚀 KiotViet Clone API Server is running!",
-    version: "1.0.0",
+    version: "2.0.0",
     endpoints: {
       products: "/api/products",
       orders: "/api/orders",
-      inventory: "/api/inventory" // Bổ sung vào route test cho đẹp
+      inventory: "/api/inventory",
+      suppliers: "/api/suppliers (NEW)",
+      purchase_orders: "/api/purchase-orders (NEW)",
+      supplier_payments: "/api/supplier-payments (NEW)",
+      inventory_log: "/api/inventory-log (NEW)"
     }
   });
 });

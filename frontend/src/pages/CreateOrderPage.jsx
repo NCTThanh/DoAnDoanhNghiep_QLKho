@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import InvoicePrint from '../components/Order/InvoicePrint';
 
+const API_URL = 'http://localhost:5000/api';
+
 const CreateOrderPage = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
@@ -17,7 +19,7 @@ const CreateOrderPage = () => {
   // Tìm sản phẩm realtime
   useEffect(() => {
     if (searchTerm.length > 1) {
-      axios.get(`/api/products?search=${searchTerm}`)
+      axios.get(`${API_URL}/products`, { params: { search: searchTerm } })
         .then(res => setProducts(res.data.data))
         .catch(() => message.error("Lỗi tìm sản phẩm"));
     } else {
@@ -26,13 +28,23 @@ const CreateOrderPage = () => {
   }, [searchTerm]);
 
   const addToCart = (product) => {
+    const stock = Number(product.quantity || 0);
+    if (stock <= 0) {
+      message.warning(`Sản phẩm ${product.name} đã hết hàng`);
+      return;
+    }
+
     const existing = cart.find(item => item.id === product.id);
     if (existing) {
+      if (existing.quantity >= stock) {
+        message.warning(`Không thể thêm quá tồn kho (${stock})`);
+        return;
+      }
       setCart(cart.map(item => 
         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
       ));
     } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
+      setCart([...cart, { ...product, quantity: 1, quantity_in_stock: Number(product.quantity || 0) }]);
     }
     message.success(`Đã thêm ${product.name}`);
   };
@@ -43,7 +55,15 @@ const CreateOrderPage = () => {
 
   const updateQuantity = (id, quantity) => {
     if (quantity < 1) return;
-    setCart(cart.map(item => item.id === id ? { ...item, quantity } : item));
+    setCart(cart.map(item => {
+      if (item.id !== id) return item;
+      const stock = Number(item.quantity_in_stock ?? item.quantity ?? 0);
+      if (quantity > stock) {
+        message.warning(`Không thể vượt tồn kho (${stock})`);
+        return item;
+      }
+      return { ...item, quantity };
+    }));
   };
 
   const totalAmount = cart.reduce((sum, item) => sum + item.selling_price * item.quantity, 0);
@@ -51,12 +71,11 @@ const CreateOrderPage = () => {
 
   const createOrder = async () => {
     try {
-      const res = await axios.post('/api/orders', {
+      const res = await axios.post(`${API_URL}/orders`, {
         customer_id: customer?.id || null,
         items: cart.map(item => ({
           product_id: item.id,
-          quantity: item.quantity,
-          unit_price: item.selling_price
+          quantity: item.quantity
         })),
         discount
       });
@@ -65,7 +84,7 @@ const CreateOrderPage = () => {
       
       setCurrentOrder({
         ...res.data,
-        items: cart,
+        items: cart.map(item => ({ ...item, quantity_in_stock: item.quantity_in_stock ?? item.quantity })),
         final_amount: finalAmount,
         created_at: new Date().toISOString()
       });
@@ -73,7 +92,7 @@ const CreateOrderPage = () => {
       setShowPrint(true);
       setCart([]); // Reset giỏ
     } catch (err) {
-      message.error('Tạo đơn thất bại!');
+      message.error(err?.response?.data?.message || 'Tạo đơn thất bại!');
     }
   };
 
@@ -98,8 +117,11 @@ const CreateOrderPage = () => {
               columns={[
                 { title: 'Tên hàng', dataIndex: 'name' },
                 { title: 'Giá bán', dataIndex: 'selling_price', render: v => v.toLocaleString() + ' ₫' },
+                { title: 'Tồn kho', dataIndex: 'quantity', width: 90, render: v => <strong>{Number(v || 0)}</strong> },
                 { title: 'Hành động', render: (_, record) => (
-                  <Button type="primary" onClick={() => addToCart(record)}>Thêm</Button>
+                  <Button type="primary" onClick={() => addToCart(record)} disabled={Number(record.quantity || 0) <= 0}>
+                    Thêm
+                  </Button>
                 )}
               ]}
             />
@@ -115,6 +137,7 @@ const CreateOrderPage = () => {
                   <div>
                     <p className="font-medium">{item.name}</p>
                     <p className="text-sm text-gray-500">{item.selling_price.toLocaleString()} ₫</p>
+                    <p className="text-xs text-gray-400">Tồn: {Number(item.quantity_in_stock ?? item.quantity ?? 0)}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button size="small" onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</Button>

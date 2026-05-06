@@ -5,7 +5,7 @@ const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',           
   password: '',           
-  port: 3307,
+  port: 3366,
   database: 'bach_hoa_db',
   waitForConnections: true,
   connectionLimit: 10,

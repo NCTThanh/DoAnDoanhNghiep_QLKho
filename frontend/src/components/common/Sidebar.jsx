@@ -7,7 +7,10 @@ import {
     DatabaseOutlined,
     ShoppingCartOutlined,
     FileTextOutlined,
-    AppstoreOutlined
+    AppstoreOutlined,
+    TeamOutlined,
+    InboxOutlined,
+    HistoryOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -45,6 +48,18 @@ const Sidebar = () => {
 
                 <Menu.Item key="/products" icon={<ShopOutlined style={{ fontSize: '16px' }} />}>
                     <Link to="/products">Hàng hóa</Link>
+                </Menu.Item>
+
+                <Menu.Item key="/suppliers" icon={<TeamOutlined style={{ fontSize: '16px' }} />}>
+                    <Link to="/suppliers">Nhà cung cấp</Link>
+                </Menu.Item>
+
+                <Menu.Item key="/purchase-orders" icon={<InboxOutlined style={{ fontSize: '16px' }} />}>
+                    <Link to="/purchase-orders">Phiếu nhập hàng</Link>
+                </Menu.Item>
+
+                <Menu.Item key="/inventory-history" icon={<HistoryOutlined style={{ fontSize: '16px' }} />}>
+                    <Link to="/inventory-history">Lịch sử kho</Link>
                 </Menu.Item>
 
                 <Menu.Item key="/create-order" icon={<ShoppingCartOutlined style={{ fontSize: '16px' }} />}>
